@@ -1,6 +1,8 @@
+'use client'
 import React from "react";
 import BlogCard from "@/components/BlogCard";
 import MODERN_BROWSERSLIST_TARGET from "next/dist/shared/lib/modern-browserslist-target";
+import { useState, useEffect } from "react";
 
 const blogPosts = [
   {
@@ -24,21 +26,28 @@ const blogPosts = [
 ];
 
 function Page(){
+
+  const [test,setTest] = useState()
+  console.log(typeof test)
+
+  async function get_todos(){
+    const data = fetch('https://jsonplaceholder.typicode.com/todos')
+    console.log(await data)
+  }
+
+  useEffect(() => {
+    const new_data = get_todos()
+    console.log(new_data.data,'----------------------')
+  }, [])
+
+
   return <div>
     <p className="text-center text-2xl font-light my-10 underline italic px-5">Empowering minds with knowledge, one line of code at a time.</p>
     <div className="sm:grid lg:grid-cols-3 lg:gap-3 px-2 lg:px-12">
       {
-        blogPosts.map((blog, index) => {
-          return (
-            <BlogCard
-              key={index}
-              bolgTitle = {blog.blogTitle}
-              content={blog.content}
-              pdate={blog.pdate}
-              img={blog.img}
-              url={"/blog-desc/" + index.toString() }
-            />
-          )
+        test?.map((res, idx) => {
+            return <p key={idx}>{res.blogTitle}</p>
+
         })
       }
     </div>
