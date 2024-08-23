@@ -1,53 +1,56 @@
 'use client'
 import React from "react";
 import BlogCard from "@/components/BlogCard";
-import MODERN_BROWSERSLIST_TARGET from "next/dist/shared/lib/modern-browserslist-target";
 import { useState, useEffect } from "react";
 
-const blogPosts = [
-  {
-    blogTitle: "Understanding JavaScript Closures",
-    content: "Closures are a fundamental concept in JavaScript. They allow functions to access variables from an outer function's scope even after the outer function has returned...",
-    pdate: "2024-08-20",
-    img: "https://autogpt.net/wp-content/uploads/2023/07/Pogla_Explore_the_latest_AI_news_from_groundbreaking_drug_trial_07ab875d-1e11-42d5-89ef-39ff3d5ab451.jpg"
-  },
-  {
-    blogTitle: "An Introduction to Async/Await in JavaScript",
-    content: "Async/await makes it easier to work with asynchronous code in JavaScript. It is syntactic sugar over promises, making the code look synchronous...",
-    pdate: "2024-08-15",
-    img: "https://coingeek.com/wp-content/uploads/2023/07/Artificial-Intelligence-2-jpg.webp"
-  },
-  {
-    blogTitle: "Exploring the Power of React Hooks",
-    content: "React hooks like useState and useEffect have changed the way we build components in React. In this post, we'll explore the basic hooks and how to use them...",
-    pdate: "2024-08-10",
-    img: "https://miro.medium.com/v2/resize:fit:1400/1*kTRZnHMDE4Q6AITCaAEI5A.png"
-  }
-];
 
-function Page(){
 
-  const [test,setTest] = useState()
-  console.log(typeof test)
+function Page() {
 
-  async function get_todos(){
-    const data = fetch('https://jsonplaceholder.typicode.com/todos')
-    console.log(await data)
+  const [test, setTest] = useState()
+
+
+  async function get_todos() {
+    fetch("http://localhost:5000").then((res) => {
+      if (res.status === 404){
+        alert("no data found")
+        return;
+      }
+
+      if (res.status === 500){
+        alert("server error")
+        return;
+      }
+
+      res.json().then((data) => {
+        setTest(data.datax)
+      })
+
+    })
+
+
   }
 
-  useEffect(() => {
-    const new_data = get_todos()
-    console.log(new_data.data,'----------------------')
-  }, [])
+  get_todos()
+
+ 
 
 
   return <div>
     <p className="text-center text-2xl font-light my-10 underline italic px-5">Empowering minds with knowledge, one line of code at a time.</p>
     <div className="sm:grid lg:grid-cols-3 lg:gap-3 px-2 lg:px-12">
       {
-        test?.map((res, idx) => {
-            return <p key={idx}>{res.blogTitle}</p>
+        test?.map((blog, idx) => {
+          return (
+            <BlogCard
+              img={blog.img}
+              bolgTitle={blog.blogTitle}
+              pdate={blog.pdate}
+              content={blog.content}
+              url={blog.url}
 
+              />
+          )
         })
       }
     </div>
